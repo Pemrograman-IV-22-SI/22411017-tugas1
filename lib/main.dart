@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -109,12 +111,83 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
               Text('Nama: Muhammad Rayhan'),
-              Text('NPM: 22411017')
+              Text('NPM: 22411017'),
+              Text('Prodi: Sistem Informasi'),
+              Text('Fakultas: Ilmu Komputer'),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Instagram Button
+                  GestureDetector(
+                    onTap: () => _launchURL('https://instagram.com/namerayhan'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FaIcon(FontAwesomeIcons.instagram),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20), // Space between icons
+
+                  // GitHub Button
+                  GestureDetector(
+                    onTap: () => _launchURL('https://github.com/rayhankoding'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FaIcon(FontAwesomeIcons.github),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20), // Space between icons
+
+                  // Email Button
+                  GestureDetector(
+                    onTap: () => _launchURL('mailto:922muhray.gmail.com'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FaIcon(FontAwesomeIcons.solidEnvelope),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20), // Space between icons
+
+                  // WhatsApp Button
+                  GestureDetector(
+                    onTap: () => _launchURL('https://wa.me/6285817735850'),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FaIcon(FontAwesomeIcons.whatsapp),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Image.asset(
+                'assets/ubl.png',
+                width: 150,
+              ),
             ],
           ),
         ));
+  }
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
