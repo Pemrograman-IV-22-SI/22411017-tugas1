@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:tugas_1_biodata/register.dart';
+import 'package:tugas_1_biodata/login.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-  static String routeName = "/login";
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+  static String routeName = "/register";
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController fullnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController numberController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -30,14 +33,41 @@ class _LoginPageState extends State<LoginPage> {
                 width: 200,
               ),
               const Text(
-                "Login Akun",
+                "Register Akun",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: fullnameController,
+                decoration: InputDecoration(
+                  labelText: "Fullname",
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.text,
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
                   labelText: "Username",
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.text,
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  labelText: "Email",
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.text,
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: numberController,
+                decoration: InputDecoration(
+                  labelText: "Number",
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.text,
@@ -68,12 +98,12 @@ class _LoginPageState extends State<LoginPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text('Belum Punya Akun?'),
+                  const Text('Sudah Punya Akun?'),
                   TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, RegisterPage.routeName);
+                      Navigator.pushNamed(context, LoginPage.routeName);
                     },
-                    child: const Text('Register Akun'),
+                    child: const Text('Login Akun'),
                   )
                 ],
               )
