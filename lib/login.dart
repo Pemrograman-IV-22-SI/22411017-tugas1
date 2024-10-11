@@ -16,7 +16,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [],
+          children: [
+            Image.asset("assets/icon_Movie.png"),
+          ],
         ),
       ),
     ));
