@@ -35,6 +35,8 @@ dependencies:
   cupertino_icons: ^1.0.6
   url_launcher: ^6.1.7
   font_awesome_flutter: ^10.4.0
+  dio: ^5.7.0
+  toastification: ^2.3.0
 
 dev_dependencies:
   flutter_test:

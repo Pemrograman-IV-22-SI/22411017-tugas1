@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
+import 'package:tugas_1_biodata/api_service/api.dart';
 import 'package:tugas_1_biodata/login.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -10,10 +13,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final dio = Dio();
   TextEditingController fullnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController numberController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
@@ -74,6 +79,15 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 10),
               TextField(
+                controller: addressController,
+                decoration: InputDecoration(
+                  labelText: "Address",
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.text,
+              ),
+              const SizedBox(height: 10),
+              TextField(
                   controller: passwordController,
                   decoration: InputDecoration(
                     labelText: "Password",
@@ -83,13 +97,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   obscureText: true),
               const SizedBox(height: 10),
               ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    registerResponse();
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 8, 89, 209),
                     minimumSize: const Size.fromHeight(50),
                   ),
                   child: const Text(
-                    "Login",
+                    "Register",
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -112,5 +128,39 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     ));
+  }
+
+  void registerResponse() async {
+    try {
+      Response response;
+      response = await dio.post(register, data: {
+        "fullname": fullnameController.text,
+        "username": usernameController.text,
+        "email": emailController.text,
+        "number": numberController.text,
+        "address": addressController.text,
+        "password": passwordController.text,
+      });
+
+      if (response.statusCode == 200) {
+        toastification.show(
+            context: context,
+            title: Text(response.data['msg']),
+            type: ToastificationType.success,
+            style: ToastificationStyle.fillColored);
+      } else {
+        toastification.show(
+            context: context,
+            title: Text(response.data['msg']),
+            type: ToastificationType.error,
+            style: ToastificationStyle.fillColored);
+      }
+    } catch (e) {
+      toastification.show(
+          context: context,
+          title: Text("Terjadi Kesalahan pada Kode"),
+          type: ToastificationType.error,
+          style: ToastificationStyle.fillColored);
+    }
   }
 }
