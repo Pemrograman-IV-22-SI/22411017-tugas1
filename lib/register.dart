@@ -14,6 +14,9 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final dio = Dio();
+
+  bool isLoading = false;
+
   TextEditingController fullnameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -96,20 +99,66 @@ class _RegisterPageState extends State<RegisterPage> {
                   keyboardType: TextInputType.text,
                   obscureText: true),
               const SizedBox(height: 10),
-              ElevatedButton(
-                  onPressed: () {
-                    registerResponse();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 8, 89, 209),
-                    minimumSize: const Size.fromHeight(50),
-                  ),
-                  child: const Text(
-                    "Register",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  )),
+              isLoading
+                  ? const CircularProgressIndicator()
+                  : ElevatedButton(
+                      onPressed: () {
+                        if (fullnameController.text.isEmpty &&
+                            fullnameController.text == '') {
+                          toastification.show(
+                              context: context,
+                              title: const Text("Fullname tidak boleh kosong"),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.fillColored);
+                        } else if (usernameController.text.isEmpty &&
+                            usernameController.text == '') {
+                          toastification.show(
+                              context: context,
+                              title: const Text("Username tidak boleh kosong"),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.fillColored);
+                        } else if (emailController.text.isEmpty &&
+                            emailController.text == '') {
+                          toastification.show(
+                              context: context,
+                              title: const Text("Email tidak boleh kosong"),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.fillColored);
+                        } else if (numberController.text.isEmpty &&
+                            numberController.text == '') {
+                          toastification.show(
+                              context: context,
+                              title: const Text("Number tidak boleh kosong"),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.fillColored);
+                        } else if (addressController.text.isEmpty &&
+                            addressController.text == '') {
+                          toastification.show(
+                              context: context,
+                              title: const Text("Address tidak boleh kosong"),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.fillColored);
+                        } else if (passwordController.text.isEmpty &&
+                            passwordController.text == '') {
+                          toastification.show(
+                              context: context,
+                              title: const Text("Password tidak boleh kosong"),
+                              type: ToastificationType.error,
+                              style: ToastificationStyle.fillColored);
+                        } else {
+                          registerResponse();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color.fromARGB(255, 8, 89, 209),
+                        minimumSize: const Size.fromHeight(50),
+                      ),
+                      child: const Text(
+                        "Register",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      )),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -132,6 +181,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void registerResponse() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
+      await Future.delayed(const Duration(seconds: 2));
+
       Response response;
       response = await dio.post(register, data: {
         "fullname": fullnameController.text,
@@ -142,12 +196,13 @@ class _RegisterPageState extends State<RegisterPage> {
         "password": passwordController.text,
       });
 
-      if (response.statusCode == 200) {
+      if (response.data['status'] == true) {
         toastification.show(
             context: context,
             title: Text(response.data['msg']),
             type: ToastificationType.success,
             style: ToastificationStyle.fillColored);
+        Navigator.pushNamed(context, LoginPage.routeName);
       } else {
         toastification.show(
             context: context,
@@ -161,6 +216,10 @@ class _RegisterPageState extends State<RegisterPage> {
           title: Text("Terjadi Kesalahan pada Kode"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }
