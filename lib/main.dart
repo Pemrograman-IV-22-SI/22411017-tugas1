@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tugas_1_biodata/admin/genre/genre.dart';
 import 'package:tugas_1_biodata/admin/home_admin.dart';
 import 'package:tugas_1_biodata/login.dart';
 import 'package:tugas_1_biodata/register.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'MovieApp',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
           RegisterPage.routeName: (context) => const RegisterPage(),
           HomeAdmin.routeName: (context) => const HomeAdmin(),
           HomeUsers.routeName: (context) => const HomeUsers(),
+          Genre.routeName: (context) => const Genre()
         });
   }
 }

@@ -150,7 +150,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 8, 89, 209),
+                        backgroundColor: Colors.teal,
                         minimumSize: const Size.fromHeight(50),
                       ),
                       child: const Text(
