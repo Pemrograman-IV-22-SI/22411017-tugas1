@@ -2,8 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:toastification/toastification.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:tugas_1_biodata/admin/home_admin.dart';
 import 'package:tugas_1_biodata/api_service/api.dart';
+import 'insert.dart';
+import 'edit.dart';
 
 class Genre extends StatefulWidget {
   const Genre({super.key});
@@ -57,11 +60,21 @@ class _GenreState extends State<Genre> {
         ),
         actions: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.add,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () async {
+              bool? isAdded = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const InsertGenre();
+                },
+              );
+              if (isAdded == true) {
+                getData();
+              }
+            },
           )
         ],
         automaticallyImplyLeading: false,
@@ -82,15 +95,38 @@ class _GenreState extends State<Genre> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Colors.yellow,
-                            size: 20,
-                          ),
+                          onPressed: () async {
+                            bool? isEdited = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return EditGenre(
+                                  idGenre: genre['id_genre'],
+                                  namaGenre: genre['nama_genre'],
+                                );
+                              },
+                            );
+                            if (isEdited == true) {
+                              getData();
+                            }
+                          },
+                          icon: const Icon(Icons.edit,
+                              color: Colors.yellow, size: 20),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.confirm,
+                              text:
+                                  'Anda ingin menghapus genre ${genre['nama_genre']}?',
+                              confirmBtnText: 'Ya',
+                              cancelBtnText: 'Tidak',
+                              confirmBtnColor: Colors.red,
+                              onConfirmBtnTap: () {
+                                deleteGenreResponse(genre['id_genre']);
+                              },
+                            );
+                          },
                           icon: const Icon(
                             Icons.delete,
                             color: Colors.red,
@@ -118,6 +154,35 @@ class _GenreState extends State<Genre> {
         print(response.data['data']);
         dataGenre = response.data['data'];
         print(dataGenre);
+      }
+    } catch (e) {
+      toastification.show(
+          context: context,
+          title: Text("Terjadi Kesalahan pada Kode"),
+          type: ToastificationType.error,
+          style: ToastificationStyle.fillColored);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  void deleteGenreResponse(int idGenre) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      Response response;
+      response = await dio.delete(deleteGenre + idGenre.toString());
+
+      if (response.data['status'] == true) {
+        toastification.show(
+            context: context,
+            title: Text(response.data['msg']),
+            type: ToastificationType.success,
+            style: ToastificationStyle.fillColored);
+        Navigator.pushNamed(context, Genre.routeName);
       }
     } catch (e) {
       toastification.show(
