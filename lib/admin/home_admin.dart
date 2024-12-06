@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_1_biodata/admin/genre/genre.dart';
+import 'package:tugas_1_biodata/admin/movie/movie.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({super.key});
@@ -49,7 +50,7 @@ class _HomeAdminState extends State<HomeAdmin> {
                   ]),
                 ),
                 GestureDetector(
-                  // onTap: () => Navigator.pushNamed(context, Page2.routes),
+                  onTap: () => Navigator.pushNamed(context, Movie.routeName),
                   child: Column(children: [
                     buildMenuItem(
                       Icons.movie,

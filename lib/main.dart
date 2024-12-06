@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_1_biodata/admin/genre/genre.dart';
 import 'package:tugas_1_biodata/admin/home_admin.dart';
+import 'package:tugas_1_biodata/admin/movie/movie.dart';
 import 'package:tugas_1_biodata/login.dart';
 import 'package:tugas_1_biodata/register.dart';
 import 'package:tugas_1_biodata/users/home_users.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
           RegisterPage.routeName: (context) => const RegisterPage(),
           HomeAdmin.routeName: (context) => const HomeAdmin(),
           HomeUsers.routeName: (context) => const HomeUsers(),
-          Genre.routeName: (context) => const Genre()
+          Genre.routeName: (context) => const Genre(),
+          Movie.routeName: (context) => const Movie(),
         });
   }
 }

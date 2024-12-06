@@ -38,6 +38,7 @@ dependencies:
   dio: ^5.7.0
   toastification: ^2.3.0
   quickalert: ^1.1.0
+  flutter_rating_bar: ^4.0.0
 
 dev_dependencies:
   flutter_test:
