@@ -5,15 +5,15 @@ import 'package:tugas_1_biodata/admin/home_admin.dart';
 import 'package:quickalert/quickalert.dart';
 import 'package:toastification/toastification.dart';
 
-class Transaction extends StatefulWidget {
-  const Transaction({super.key});
-  static String routeName = '/Transaction';
+class TransactionAdmin extends StatefulWidget {
+  const TransactionAdmin({super.key});
+  static String routeName = '/transaction_admin';
 
   @override
-  State<Transaction> createState() => _TransactionState();
+  State<TransactionAdmin> createState() => _TransactionAdminState();
 }
 
-class _TransactionState extends State<Transaction> {
+class _TransactionAdminState extends State<TransactionAdmin> {
   final Dio dio = Dio();
   bool isLoading = false;
   List<dynamic> transactions = [];

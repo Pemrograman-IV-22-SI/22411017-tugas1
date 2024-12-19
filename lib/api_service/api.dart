@@ -1,4 +1,4 @@
-String baseUrl = "http://192.168.249.135:3000";
+String baseUrl = "http://192.168.54.55:3000";
 
 //auth
 String register = "$baseUrl/users/register";

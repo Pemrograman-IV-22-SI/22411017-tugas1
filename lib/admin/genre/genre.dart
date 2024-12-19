@@ -8,15 +8,15 @@ import 'package:tugas_1_biodata/api_service/api.dart';
 import 'insert.dart';
 import 'edit.dart';
 
-class Genre extends StatefulWidget {
-  const Genre({super.key});
-  static String routeName = '/genre';
+class GenreAdmin extends StatefulWidget {
+  const GenreAdmin({super.key});
+  static String routeName = '/genre_admin';
 
   @override
-  State<Genre> createState() => _GenreState();
+  State<GenreAdmin> createState() => _GenreAdminState();
 }
 
-class _GenreState extends State<Genre> {
+class _GenreAdminState extends State<GenreAdmin> {
   final dio = Dio();
   bool isLoading = false;
   var dataGenre = [];
@@ -185,7 +185,7 @@ class _GenreState extends State<Genre> {
             title: Text(response.data['msg']),
             type: ToastificationType.success,
             style: ToastificationStyle.fillColored);
-        Navigator.pushNamed(context, Genre.routeName);
+        Navigator.pushNamed(context, GenreAdmin.routeName);
       }
     } catch (e) {
       toastification.show(

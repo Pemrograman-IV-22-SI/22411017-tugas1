@@ -1,22 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:toastification/toastification.dart';
-import 'package:quickalert/quickalert.dart';
-import 'package:tugas_1_biodata/admin/home_admin.dart';
 import 'package:tugas_1_biodata/api_service/api.dart';
-import 'insert.dart';
-import 'edit.dart';
 
-class MovieAdmin extends StatefulWidget {
-  const MovieAdmin({super.key});
-  static String routeName = '/movie_admin';
+class MovieUsers extends StatefulWidget {
+  const MovieUsers({super.key});
+  static String routeName = '/movie_users';
 
   @override
-  State<MovieAdmin> createState() => _MovieAdminState();
+  State<MovieUsers> createState() => _MovieUsersState();
 }
 
-class _MovieAdminState extends State<MovieAdmin> {
+class _MovieUsersState extends State<MovieUsers> {
   final dio = Dio();
   bool isLoading = false;
   var dataMovie = [];
@@ -27,84 +22,21 @@ class _MovieAdminState extends State<MovieAdmin> {
     getData();
   }
 
-  void deleteMovieResponse(int idMovie) async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-      Response response = await dio.delete(deleteMovie + idMovie.toString());
-
-      if (response.data['status'] == true) {
-        toastification.show(
-          context: context,
-          title: Text(response.data['msg']),
-          type: ToastificationType.success,
-          style: ToastificationStyle.fillColored,
-        );
-        getData();
-      }
-    } catch (e) {
-      toastification.show(
-        context: context,
-        title: const Text("Terjadi Kesalahan pada Kode"),
-        type: ToastificationType.error,
-        style: ToastificationStyle.fillColored,
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         title: Row(
-          children: <Widget>[
-            IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, HomeAdmin.routeName);
-              },
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(width: 10),
-            const Icon(Icons.movie, color: Colors.white),
-            const SizedBox(width: 10),
-            const Text(
-              "Movie",
-              style: TextStyle(color: Colors.white),
-            ),
+          children: const <Widget>[
+            Icon(Icons.movie, color: Colors.white),
+            SizedBox(width: 10),
+            Text("Movies", style: TextStyle(color: Colors.white)),
           ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: IconButton(
-              icon: const Icon(
-                Icons.add,
-                color: Colors.white,
-              ),
-              onPressed: () async {
-                bool? isAdded = await showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const InsertMovie();
-                  },
-                );
-                if (isAdded == true) {
-                  getData();
-                }
-              },
-            ),
-          ),
-        ],
-        automaticallyImplyLeading: false,
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -118,16 +50,13 @@ class _MovieAdminState extends State<MovieAdmin> {
               ),
               itemBuilder: (context, index) {
                 var movie = dataMovie[index];
-                return MovieCard(
-                  idMovie: movie['id_movie'],
+                return MovieCardUser(
                   title: movie['title'],
                   rating: movie['rating'],
                   imageName: movie['image'],
                   price: movie['price'],
                   description: movie['description'],
                   namaGenre: movie['genre_movie_genreTogenre']['nama_genre'],
-                  onRefresh: getData,
-                  onDelete: deleteMovieResponse,
                 );
               },
               itemCount: dataMovie.length,
@@ -145,14 +74,14 @@ class _MovieAdminState extends State<MovieAdmin> {
 
       if (response.data['status'] == true) {
         dataMovie = response.data['data'];
-        print(dataMovie);
       }
     } catch (e) {
       toastification.show(
-          context: context,
-          title: const Text("Terjadi Kesalahan pada Kode"),
-          type: ToastificationType.error,
-          style: ToastificationStyle.fillColored);
+        context: context,
+        title: const Text("Terjadi Kesalahan saat memuat data"),
+        type: ToastificationType.error,
+        style: ToastificationStyle.fillColored,
+      );
     } finally {
       setState(() {
         isLoading = false;
@@ -161,28 +90,22 @@ class _MovieAdminState extends State<MovieAdmin> {
   }
 }
 
-class MovieCard extends StatelessWidget {
-  final int idMovie;
+class MovieCardUser extends StatelessWidget {
   final String title;
   final double rating;
   final String imageName;
   final int price;
   final String description;
   final String namaGenre;
-  final VoidCallback onRefresh;
-  final Function(int) onDelete;
 
-  const MovieCard({
+  const MovieCardUser({
     super.key,
-    required this.idMovie,
     required this.title,
     required this.rating,
     required this.imageName,
     required this.price,
     required this.description,
     required this.namaGenre,
-    required this.onRefresh,
-    required this.onDelete,
   });
 
   @override
@@ -290,13 +213,6 @@ class MovieCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                tooltip: "Tutup",
-              ),
             ],
           ),
           content: SingleChildScrollView(
@@ -359,55 +275,6 @@ class MovieCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        bool? isEdited = await showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return EditMovie(
-                              idMovie: idMovie.toString(),
-                              namaMovie: title,
-                              price: price,
-                              rating: rating,
-                              description: description,
-                            );
-                          },
-                        );
-                        if (isEdited == true) {
-                          onRefresh();
-                        }
-                      },
-                      icon: const Icon(Icons.edit, size: 20),
-                      tooltip: "Edit",
-                    ),
-                    const SizedBox(width: 10),
-                    IconButton(
-                      onPressed: () {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.confirm,
-                          text: 'Anda ingin menghapus movie $title?',
-                          confirmBtnText: 'Ya',
-                          cancelBtnText: 'Tidak',
-                          confirmBtnColor: Colors.red,
-                          onConfirmBtnTap: () {
-                            Navigator.pop(context);
-                            onDelete(idMovie);
-                          },
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.delete,
-                        size: 20,
-                      ),
-                      tooltip: "Tutup",
-                    ),
-                  ],
-                )
               ],
             ),
           ),

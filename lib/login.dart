@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         body: SingleChildScrollView(
       child: Center(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10),
               TextField(
                 controller: usernameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Username",
                   border: OutlineInputBorder(),
                 ),
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 10),
               TextField(
                   controller: passwordController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(),
                   ),
@@ -156,7 +156,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       toastification.show(
           context: context,
-          title: const Text("Terjadi Kesalahan pada Kode"),
+          title: Text("Terjadi Kesalahan pada Kode"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     } finally {

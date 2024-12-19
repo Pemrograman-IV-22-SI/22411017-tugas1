@@ -43,7 +43,8 @@ class _HomeAdminState extends State<HomeAdmin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, Genre.routeName),
+                  onTap: () =>
+                      Navigator.pushNamed(context, GenreAdmin.routeName),
                   child: Column(children: [
                     buildMenuItem(
                       Icons.library_books,
@@ -52,7 +53,8 @@ class _HomeAdminState extends State<HomeAdmin> {
                   ]),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, Movie.routeName),
+                  onTap: () =>
+                      Navigator.pushNamed(context, MovieAdmin.routeName),
                   child: Column(children: [
                     buildMenuItem(
                       Icons.movie,
@@ -68,7 +70,7 @@ class _HomeAdminState extends State<HomeAdmin> {
               children: [
                 GestureDetector(
                   onTap: () =>
-                      Navigator.pushNamed(context, Transaction.routeName),
+                      Navigator.pushNamed(context, TransactionAdmin.routeName),
                   child: Column(children: [
                     buildMenuItem(
                       Icons.receipt_long,
