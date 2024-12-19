@@ -59,23 +59,26 @@ class _GenreState extends State<Genre> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: IconButton(
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              onPressed: () async {
+                bool? isAdded = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const InsertGenre();
+                  },
+                );
+                if (isAdded == true) {
+                  getData();
+                }
+              },
             ),
-            onPressed: () async {
-              bool? isAdded = await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const InsertGenre();
-                },
-              );
-              if (isAdded == true) {
-                getData();
-              }
-            },
-          )
+          ),
         ],
         automaticallyImplyLeading: false,
       ),
@@ -109,9 +112,9 @@ class _GenreState extends State<Genre> {
                               getData();
                             }
                           },
-                          icon: const Icon(Icons.edit,
-                              color: Colors.yellow, size: 20),
+                          icon: const Icon(Icons.edit, size: 20),
                         ),
+                        SizedBox(width: 10),
                         IconButton(
                           onPressed: () {
                             QuickAlert.show(
@@ -129,7 +132,6 @@ class _GenreState extends State<Genre> {
                           },
                           icon: const Icon(
                             Icons.delete,
-                            color: Colors.red,
                             size: 20,
                           ),
                         ),

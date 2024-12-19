@@ -2,9 +2,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:toastification/toastification.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:tugas_1_biodata/admin/home_admin.dart';
 import 'package:tugas_1_biodata/api_service/api.dart';
 import 'insert.dart';
+import 'edit.dart';
 
 class Movie extends StatefulWidget {
   const Movie({super.key});
@@ -23,6 +25,36 @@ class _MovieState extends State<Movie> {
   void initState() {
     super.initState();
     getData();
+  }
+
+  void deleteMovieResponse(int idMovie) async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      Response response = await dio.delete(deleteMovie + idMovie.toString());
+
+      if (response.data['status'] == true) {
+        toastification.show(
+          context: context,
+          title: Text(response.data['msg']),
+          type: ToastificationType.success,
+          style: ToastificationStyle.fillColored,
+        );
+        getData();
+      }
+    } catch (e) {
+      toastification.show(
+        context: context,
+        title: Text("Terjadi Kesalahan pada Kode"),
+        type: ToastificationType.error,
+        style: ToastificationStyle.fillColored,
+      );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -51,20 +83,23 @@ class _MovieState extends State<Movie> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add, color: Colors.white),
-            onPressed: () async {
-              bool? isAdded = await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const InsertMovie();
-                },
-              );
-              if (isAdded == true) {
-                getData();
-              }
-            },
-          )
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: IconButton(
+              icon: const Icon(Icons.add, color: Colors.white),
+              onPressed: () async {
+                bool? isAdded = await showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const InsertMovie();
+                  },
+                );
+                if (isAdded == true) {
+                  getData();
+                }
+              },
+            ),
+          ),
         ],
         automaticallyImplyLeading: false,
       ),
@@ -81,11 +116,15 @@ class _MovieState extends State<Movie> {
               itemBuilder: (context, index) {
                 var movie = dataMovie[index];
                 return MovieCard(
+                  idMovie: movie['id_movie'],
                   title: movie['title'],
                   rating: movie['rating'],
                   imageName: movie['image'],
                   price: movie['price'],
                   description: movie['description'],
+                  namaGenre: movie['genre_movie_genreTogenre']['nama_genre'],
+                  onRefresh: getData,
+                  onDelete: deleteMovieResponse,
                 );
               },
               itemCount: dataMovie.length,
@@ -120,19 +159,27 @@ class _MovieState extends State<Movie> {
 }
 
 class MovieCard extends StatelessWidget {
+  final int idMovie;
   final String title;
   final double rating;
   final String imageName;
   final int price;
   final String description;
+  final String namaGenre;
+  final VoidCallback onRefresh;
+  final Function(int) onDelete;
 
   const MovieCard({
     Key? key,
+    required this.idMovie,
     required this.title,
     required this.rating,
     required this.imageName,
     required this.price,
     required this.description,
+    required this.namaGenre,
+    required this.onRefresh,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -191,9 +238,22 @@ class MovieCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                "Rp. ${price.toString()}",
-                style: const TextStyle(fontWeight: FontWeight.w500),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    namaGenre,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "Rp. ${price.toString()}",
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                ],
               ),
             ),
           ],
@@ -203,6 +263,9 @@ class MovieCard extends StatelessWidget {
   }
 
   void _showMovieDetails(BuildContext context) {
+    const String baseUrl = "http://localhost:3000/img/movie/";
+    final String imageUrl = baseUrl + imageName;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -217,10 +280,19 @@ class MovieCard extends StatelessWidget {
                 child: Text(
                   title,
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 21),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 21,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                tooltip: "Tutup",
               ),
             ],
           ),
@@ -233,6 +305,8 @@ class MovieCard extends StatelessWidget {
                   child: Image.network(
                     imageUrl,
                     fit: BoxFit.cover,
+                    width: 240,
+                    height: 240,
                     errorBuilder: (context, error, stackTrace) {
                       return const Icon(Icons.broken_image,
                           size: 100, color: Colors.grey);
@@ -245,8 +319,8 @@ class MovieCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 14),
                 ),
                 const SizedBox(height: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Text(
                       "Rating: ",
@@ -254,22 +328,26 @@ class MovieCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        children: List.generate(
-                          5,
-                          (index) => Icon(
-                            index < rating.round()
-                                ? Icons.star
-                                : Icons.star_border,
-                            color: Colors.amber,
-                            size: 18,
-                          ),
+                    Row(
+                      children: List.generate(
+                        5,
+                        (index) => Icon(
+                          index < rating.round()
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: Colors.amber,
+                          size: 18,
                         ),
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Genre: $namaGenre",
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -278,18 +356,58 @@ class MovieCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: () async {
+                        bool? isEdited = await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return EditMovie(
+                              idMovie: idMovie.toString(),
+                              namaMovie: title,
+                              price: price,
+                              rating: rating,
+                              description: description,
+                            );
+                          },
+                        );
+                        if (isEdited == true) {
+                          onRefresh();
+                        }
+                      },
+                      icon: const Icon(Icons.edit, size: 20),
+                      tooltip: "Edit",
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      onPressed: () {
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.confirm,
+                          text: 'Anda ingin menghapus movie $title?',
+                          confirmBtnText: 'Ya',
+                          cancelBtnText: 'Tidak',
+                          confirmBtnColor: Colors.red,
+                          onConfirmBtnTap: () {
+                            Navigator.pop(context);
+                            onDelete(idMovie);
+                          },
+                        );
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        size: 20,
+                      ),
+                      tooltip: "Tutup",
+                    ),
+                  ],
+                )
               ],
             ),
           ),
-          actions: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text("Tutup", style: TextStyle(color: Colors.white)),
-            ),
-          ],
         );
       },
     );
