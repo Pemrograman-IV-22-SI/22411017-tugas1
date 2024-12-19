@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tugas_1_biodata/admin/genre/genre.dart';
 import 'package:tugas_1_biodata/admin/movie/movie.dart';
+import 'package:tugas_1_biodata/admin/transaction/transaction.dart';
+import 'package:quickalert/quickalert.dart';
 
 class HomeAdmin extends StatefulWidget {
   const HomeAdmin({super.key});
@@ -65,7 +67,8 @@ class _HomeAdminState extends State<HomeAdmin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                  // onTap: () => Navigator.pushNamed(context, Page3.routes),
+                  onTap: () =>
+                      Navigator.pushNamed(context, Transaction.routeName),
                   child: Column(children: [
                     buildMenuItem(
                       Icons.receipt_long,
@@ -74,13 +77,27 @@ class _HomeAdminState extends State<HomeAdmin> {
                   ]),
                 ),
                 GestureDetector(
-                  // onTap: () => Navigator.pushNamed(context, Page4.routes),
-                  child: Column(children: [
-                    buildMenuItem(
-                      Icons.output,
-                      'Keluar',
-                    ),
-                  ]),
+                  child: Column(
+                    children: [
+                      buildMenuItem(
+                        Icons.output,
+                        'Keluar',
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    QuickAlert.show(
+                      context: context,
+                      type: QuickAlertType.confirm,
+                      title: "Konfirmasi",
+                      text: "Apakah Anda yakin ingin keluar?",
+                      confirmBtnText: "Ya",
+                      cancelBtnText: "Tidak",
+                      onConfirmBtnTap: () {
+                        // exit(0);
+                      },
+                    );
+                  },
                 ),
               ],
             ),

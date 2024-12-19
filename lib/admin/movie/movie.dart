@@ -46,7 +46,7 @@ class _MovieState extends State<Movie> {
     } catch (e) {
       toastification.show(
         context: context,
-        title: Text("Terjadi Kesalahan pada Kode"),
+        title: const Text("Terjadi Kesalahan pada Kode"),
         type: ToastificationType.error,
         style: ToastificationStyle.fillColored,
       );
@@ -86,7 +86,10 @@ class _MovieState extends State<Movie> {
           Padding(
             padding: const EdgeInsets.only(right: 15),
             child: IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
               onPressed: () async {
                 bool? isAdded = await showDialog(
                   context: context,
@@ -170,7 +173,7 @@ class MovieCard extends StatelessWidget {
   final Function(int) onDelete;
 
   const MovieCard({
-    Key? key,
+    super.key,
     required this.idMovie,
     required this.title,
     required this.rating,
@@ -180,7 +183,7 @@ class MovieCard extends StatelessWidget {
     required this.namaGenre,
     required this.onRefresh,
     required this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +197,7 @@ class MovieCard extends StatelessWidget {
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.grey, width: 1.5),
+          side: const BorderSide(color: Colors.grey, width: 1.5),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -18,13 +18,13 @@ class _InsertGenreState extends State<InsertGenre> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(
+      title: const Row(
         children: [
-          const Icon(
+          Icon(
             Icons.library_books,
           ),
-          const SizedBox(width: 8),
-          const Text(
+          SizedBox(width: 8),
+          Text(
             "Tambah Genre",
             style: TextStyle(
               fontWeight: FontWeight.bold,

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 import 'package:tugas_1_biodata/api_service/api.dart';
+import 'package:flutter/services.dart';
 
 class EditMovie extends StatefulWidget {
   final String idMovie;
@@ -11,13 +12,13 @@ class EditMovie extends StatefulWidget {
   final String description;
 
   const EditMovie({
-    Key? key,
+    super.key,
     required this.idMovie,
     required this.namaMovie,
     required this.price,
     required this.rating,
     required this.description,
-  }) : super(key: key);
+  });
 
   @override
   State<EditMovie> createState() => _EditMovieState();
@@ -70,17 +71,22 @@ class _EditMovieState extends State<EditMovie> {
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(labelText: 'Judul Movie'),
             ),
             TextField(
               controller: _priceController,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Price'),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              decoration: const InputDecoration(
+                labelText: 'Harga Movie',
+              ),
             ),
             TextField(
               controller: _descriptionController,
               maxLines: 3,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(labelText: 'Deskripsi'),
             ),
             const SizedBox(height: 10),
             Column(
@@ -129,14 +135,14 @@ class _EditMovieState extends State<EditMovie> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context, false),
-          child: const Text("Cancel"),
+          child: const Text("Batal"),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
           onPressed: isLoading ? null : _editMovie,
           child: isLoading
               ? const CircularProgressIndicator(color: Colors.white)
-              : const Text("Save", style: TextStyle(color: Colors.white)),
+              : const Text("Simpan", style: TextStyle(color: Colors.white)),
         ),
       ],
     );
@@ -163,7 +169,7 @@ class _EditMovieState extends State<EditMovie> {
       print("Error: $e");
       toastification.show(
           context: context,
-          title: Text("Gagal memuat daftar genre"),
+          title: const Text("Gagal memuat daftar genre"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     }
@@ -194,7 +200,7 @@ class _EditMovieState extends State<EditMovie> {
       print("Error: $e");
       toastification.show(
           context: context,
-          title: Text("Terjadi Kesalahan"),
+          title: const Text("Terjadi Kesalahan"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     } finally {

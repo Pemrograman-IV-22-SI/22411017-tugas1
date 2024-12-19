@@ -16,3 +16,9 @@ String getMovie = "$baseUrl/movie/get";
 String insertMovie = "$baseUrl/movie/insert";
 String deleteMovie = "$baseUrl/movie/delete/";
 String editMovie = "$baseUrl/movie/edit/";
+
+//transaction
+String getTransactionALL = "$baseUrl/transaction/get";
+String getTransactionbyID = "$baseUrl/transaction/get/:id";
+String insertTransaction = "$baseUrl/transaction/insert";
+String confirmTransaction = "$baseUrl/transaction/confirm-transaction/:id";

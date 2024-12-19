@@ -30,7 +30,7 @@ class _RegisterPageState extends State<RegisterPage> {
         body: SingleChildScrollView(
       child: Center(
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -47,7 +47,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
               TextField(
                 controller: fullnameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Fullname",
                   border: OutlineInputBorder(),
                 ),
@@ -56,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
               TextField(
                 controller: usernameController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Username",
                   border: OutlineInputBorder(),
                 ),
@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
               TextField(
                 controller: emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Email",
                   border: OutlineInputBorder(),
                 ),
@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
               TextField(
                 controller: numberController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Number",
                   border: OutlineInputBorder(),
                 ),
@@ -83,7 +83,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
               TextField(
                 controller: addressController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Address",
                   border: OutlineInputBorder(),
                 ),
@@ -92,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(height: 10),
               TextField(
                   controller: passwordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(),
                   ),
@@ -213,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } catch (e) {
       toastification.show(
           context: context,
-          title: Text("Terjadi Kesalahan pada Kode"),
+          title: const Text("Terjadi Kesalahan pada Kode"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     } finally {

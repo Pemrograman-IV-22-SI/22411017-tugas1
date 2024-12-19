@@ -7,8 +7,7 @@ class EditGenre extends StatefulWidget {
   final int idGenre;
   final String namaGenre;
 
-  const EditGenre({Key? key, required this.idGenre, required this.namaGenre})
-      : super(key: key);
+  const EditGenre({super.key, required this.idGenre, required this.namaGenre});
 
   @override
   State<EditGenre> createState() => _EditGenreState();
@@ -34,11 +33,11 @@ class _EditGenreState extends State<EditGenre> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(
+      title: const Row(
         children: [
-          const Icon(Icons.edit),
-          const SizedBox(width: 8),
-          const Text(
+          Icon(Icons.edit),
+          SizedBox(width: 8),
+          Text(
             "Edit Genre",
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -82,7 +81,7 @@ class _EditGenreState extends State<EditGenre> {
     } catch (e) {
       toastification.show(
           context: context,
-          title: Text("Terjadi Kesalahan"),
+          title: const Text("Terjadi Kesalahan"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     } finally {

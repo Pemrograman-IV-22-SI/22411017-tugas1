@@ -27,6 +27,7 @@ class _GenreState extends State<Genre> {
     getData();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -114,7 +115,7 @@ class _GenreState extends State<Genre> {
                           },
                           icon: const Icon(Icons.edit, size: 20),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {
                             QuickAlert.show(
@@ -160,7 +161,7 @@ class _GenreState extends State<Genre> {
     } catch (e) {
       toastification.show(
           context: context,
-          title: Text("Terjadi Kesalahan pada Kode"),
+          title: const Text("Terjadi Kesalahan pada Kode"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     } finally {
@@ -189,7 +190,7 @@ class _GenreState extends State<Genre> {
     } catch (e) {
       toastification.show(
           context: context,
-          title: Text("Terjadi Kesalahan pada Kode"),
+          title: const Text("Terjadi Kesalahan pada Kode"),
           type: ToastificationType.error,
           style: ToastificationStyle.fillColored);
     } finally {
